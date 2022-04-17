@@ -7,6 +7,8 @@ namespace RayTracer
 {
     public interface IGeometricObject
     {
+        public void Init();
+        
         public Material GetMaterial();
         
         public bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr);
@@ -26,6 +28,8 @@ namespace RayTracer
     
     public abstract class GeometricObject : MonoBehaviour, IGeometricObject
     {
+        public abstract void Init();
+        
         public abstract bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr);
 
         public virtual bool ShadowHit(TraceRay ray, out float tMin)

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 using static Unity.Mathematics.math;
 using float3 = Unity.Mathematics.float3;
 
@@ -9,12 +10,26 @@ namespace RayTracer
         private const float KEpsilon = 0.001f;
 
         [SerializeField] private Material material;
-        
-        private void Start()
+
+        public void SetData(float3 p0, float3 a, float3 b, float3 n)
         {
-            var trans = transform;
+            this.p0 = p0;
+            this.a = a;
+            this.b = b;
+            normal = normalize(n);
+            
+            a_len_squared = lengthsq(a);
+            b_len_squared = lengthsq(b);
+
+            area = length(a) * length(b);
+            inv_area = 1.0f / area;
+        }
+        
+        public override void Init()
+        {
+            Transform trans = transform;
             var p = (float3)trans.position;
-            var lossyScale = trans.lossyScale;
+            Vector3 lossyScale = trans.lossyScale;
             var scaleX = lossyScale.x;
             var scaleY = lossyScale.y;
 
@@ -42,8 +57,8 @@ namespace RayTracer
             if (t <= KEpsilon)
                 return false;
             
-            var p = ray.o + t * ray.d;
-            var d = p - p0;
+            float3 p = ray.o + t * ray.d;
+            float3 d = p - p0;
             
             var ddota = dot(d, a);
             if (ddota < 0.0f || ddota > a_len_squared)
@@ -70,8 +85,8 @@ namespace RayTracer
             if (t <= KEpsilon)
                 return false;
             
-            var p = ray.o + t * ray.d;
-            var d = p - p0;
+            float3 p = ray.o + t * ray.d;
+            float3 d = p - p0;
             
             var ddota = dot(d, a);
             if (ddota < 0.0f || ddota > a_len_squared)
@@ -93,7 +108,7 @@ namespace RayTracer
 
         public override float3 Sample()
         {
-            var samplePoint = sampler.SampleUnitSquare();
+            float2 samplePoint = sampler.SampleUnitSquare();
             return p0 + samplePoint.x * a + samplePoint.y * b;
         }
 

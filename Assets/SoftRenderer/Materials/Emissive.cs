@@ -14,7 +14,7 @@ namespace RayTracer
 
         private float3 ce;
         
-        private void OnEnable()
+        public override void Init(int sampleCount)
         {
             ce = float3((Vector3)(Vector4) color);
         }

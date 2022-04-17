@@ -15,12 +15,34 @@ namespace RayTracer
                 return float3.zero;
             else
             {
-                var sr = world.HitObjects(ray);
+                ShadeRec sr = world.HitObjects(ray);
 
                 if (sr.hit_an_object)
                 {
                     sr.depth = depth;
                     sr.ray = ray;
+                    return sr.material.AreaLightShade(sr);
+                }
+                else
+                {
+                    return  (Vector3)(Vector4)world.backGroundColor;
+                }
+            }
+        }
+
+        public override float3 TraceRay(TraceRay ray, ref float tmin, int depth)
+        {
+            if (depth > world.traceCamera.vp.maxDepth)
+                return (Vector3)(Vector4)world.backGroundColor;
+            else
+            {
+                ShadeRec sr = world.HitObjects(ray);
+
+                if (sr.hit_an_object)
+                {
+                    sr.depth = depth;
+                    sr.ray = ray;
+                    tmin = sr.t;
                     return sr.material.AreaLightShade(sr);
                 }
                 else

@@ -11,14 +11,14 @@ namespace RayTracer
 
         public override float3 TraceRay(TraceRay ray, int depth)
         {
-            var sr = world.HitObjects(ray);
+            ShadeRec sr = world.HitObjects(ray);
 
             if (sr.hit_an_object)
             {
                 sr.ray = ray;
                 if (sr.material)
                 {
-                    var c = sr.material.Shade(sr);
+                    float3 c = sr.material.Shade(sr);
                     return new float3(c.x, c.y, c.z);
                 }
                 else

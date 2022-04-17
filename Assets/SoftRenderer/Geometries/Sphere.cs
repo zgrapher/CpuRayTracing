@@ -10,16 +10,16 @@ namespace RayTracer
 
         [SerializeField] private Material material;
 
-        private void Start()
+        public override void Init()
         {
-            var trans = transform;
+            Transform trans = transform;
             center = trans.position;
             radius = trans.localScale.x * 0.5f;
         }
 
         public override bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr)
         {
-            var temp = (float3)ray.o - center;
+            float3 temp = (float3)ray.o - center;
             var a = dot(ray.d, ray.d);
             var b = 2.0f * dot(temp, ray.d);
             var c = dot(temp, temp) - radius * radius;
@@ -64,7 +64,7 @@ namespace RayTracer
             if (!enableShadow)
                 return false;
 
-            var temp = (float3)ray.o - center;
+            float3 temp = (float3)ray.o - center;
             var a = dot(ray.d, ray.d);
             var b = 2.0f * dot(temp, ray.d);
             var c = dot(temp, temp) - radius * radius;

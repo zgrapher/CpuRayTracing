@@ -1162,7 +1162,7 @@ MonoBehaviour:
     gamma: 1
     maxDepth: 1
     pixelSize: 1
-  sampleSize: 4
+  sampleSize: 1
   viewDistance: 3
 --- !u!114 &423937890
 MonoBehaviour:

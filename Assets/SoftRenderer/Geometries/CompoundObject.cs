@@ -6,8 +6,19 @@ namespace RayTracer
 {
     public class CompoundObject : IGeometricObject
     {
-        protected Material material;
+        protected const float KEpsilon = 0.0001f;
         
+        protected Material material;
+
+        public virtual void Init()
+        {
+        }
+
+        public void Clear()
+        {
+            objects.Clear();
+        }
+
         public Material GetMaterial()
         {
             return material;
@@ -35,7 +46,7 @@ namespace RayTracer
             var hit = false;
             tMin = float.MaxValue;
 
-            foreach (var obj in objects)
+            foreach (IGeometricObject obj in objects)
             {
                 if (obj.Hit(ray, out var t, ref sr) && t < tMin)
                 {
@@ -89,5 +100,47 @@ namespace RayTracer
         }
 
         protected List<IGeometricObject> objects = new List<IGeometricObject>();
+
+        public float3 FindMinBounds()
+        {
+            float3 p0 = math.float3(float.MaxValue);
+
+            foreach (IGeometricObject obj in objects)
+            {
+                BBox objectBox = obj.GetBoundingBox();
+
+                if (objectBox.x0 < p0.x)
+                    p0.x = objectBox.x0;
+                if (objectBox.y0 < p0.y)
+                    p0.y = objectBox.y0;
+                if (objectBox.z0 < p0.z)
+                    p0.z = objectBox.z0;
+            }
+
+            p0.x -= KEpsilon; p0.y -= KEpsilon; p0.z -= KEpsilon;
+
+            return p0;
+        }
+
+        public float3 FindMaxBounds()
+        {
+            float3 p1 = math.float3(-float.MaxValue);
+
+            foreach (IGeometricObject obj in objects)
+            {
+                BBox objectBox = obj.GetBoundingBox();
+
+                if (objectBox.x1 > p1.x)
+                    p1.x = objectBox.x1;
+                if (objectBox.y1 > p1.y)
+                    p1.y = objectBox.y1;
+                if (objectBox.z1 > p1.z)
+                    p1.z = objectBox.z1;
+            }
+
+            p1.x += KEpsilon; p1.y += KEpsilon; p1.z += KEpsilon;
+
+            return p1;
+        }
     }
 }

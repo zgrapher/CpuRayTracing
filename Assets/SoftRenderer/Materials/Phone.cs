@@ -1,6 +1,7 @@
 ﻿using Unity.Mathematics;
 using static Unity.Mathematics.math;
 using UnityEngine;
+using float3 = Unity.Mathematics.float3;
 
 namespace RayTracer
 {
@@ -19,7 +20,7 @@ namespace RayTracer
         
         [SerializeField] protected float Exp;
 
-        protected void OnEnable()
+        public override void Init(int sampleCount)
         {
             ambient_brdf.SetKa(ka);
             ambient_brdf.SetCd(float3(cd.r, cd.g, cd.b));
@@ -33,12 +34,12 @@ namespace RayTracer
 
         public override float3 Shade(ShadeRec sr)
         {
-            var wo = -sr.ray.d;
-            var radiance = ambient_brdf.rho(sr, wo) * sr.w.ambient.L(sr);
+            float3 wo = -sr.ray.d;
+            float3 radiance = ambient_brdf.rho(sr, wo) * sr.w.ambient.L(sr);
 
-            foreach (var light in sr.w.lights)
+            foreach (LightBase light in sr.w.lights)
             {
-                var wi = light.GetDirection(sr);
+                float3 wi = light.GetDirection(sr);
                 var ndotwi = dot(sr.normal, wi);
 
                 if (ndotwi <= 0.0f)
@@ -63,12 +64,12 @@ namespace RayTracer
 
         public override float3 AreaLightShade(ShadeRec sr)
         {
-            var wo = -sr.ray.d;
-            var radiance = ambient_brdf.rho(sr, wo) * sr.w.ambient.L(sr);
+            float3 wo = -sr.ray.d;
+            float3 radiance = float3.zero;// zjtest = ambient_brdf.rho(sr, wo) * sr.w.ambient.L(sr);
 
-            foreach (var light in sr.w.lights)
+            foreach (LightBase light in sr.w.lights)
             {
-                var wi = light.GetDirection(sr);
+                float3 wi = light.GetDirection(sr);
                 var ndotwi = dot(sr.normal, wi);
 
                 if (ndotwi <= 0.0f)

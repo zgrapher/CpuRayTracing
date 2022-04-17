@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Emmisive
   m_EditorClassIdentifier: 
   ls: 8
-  color: {r: 0.9433962, g: 0.6806677, b: 0.3693485, a: 0}
+  color: {r: 1, g: 1, b: 1, a: 0}

@@ -9,12 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac30506ef8cb23d46990750fa63e5f61, type: 3}
-  m_Name: PhonePlane
+  m_Script: {fileID: 11500000, guid: 644d0ea2b4454c02b6b20de8581e4cc4, type: 3}
+  m_Name: DielectricCube
   m_EditorClassIdentifier: 
-  cd: {r: 1, g: 1, b: 1, a: 0}
-  cs: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 0}
-  ka: 0.1
-  kd: 1
+  cd: {r: 0, g: 0, b: 0, a: 0}
+  cs: {r: 0, g: 0, b: 0, a: 0}
+  ka: 0
+  kd: 0
   ks: 0
-  Exp: 1
+  Exp: 0
+  cfIn:
+    x: 1
+    y: 0.8
+    z: 0.8
+  cfOut:
+    x: 1
+    y: 1
+    z: 1
+  etaIn: 1.1
+  etaOut: 1

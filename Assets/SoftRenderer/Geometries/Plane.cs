@@ -10,10 +10,10 @@ namespace RayTracer
 
         [SerializeField]
         private Material material;
-        
-        private void Start()
+
+        public override void Init()
         {
-            var trans = transform;
+            Transform trans = transform;
             point = trans.position;
             normal = trans.up;
         }

@@ -1,5 +1,6 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace RayTracer
 {
@@ -20,8 +21,6 @@ namespace RayTracer
             return float3.zero;
         }
 
-        public virtual void SetSamples(Sampler samp)
-        {
-        }
+        public abstract void Init(int sampleCount);
     }
 }

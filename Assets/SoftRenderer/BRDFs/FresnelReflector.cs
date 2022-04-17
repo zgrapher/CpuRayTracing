@@ -10,10 +10,6 @@ namespace RayTracer
         
         public float etaOut { set; get; }
         
-        public float kr { set; get; }
-        
-        public float3 cr { set; get; }
-        
         public override float3 f(ShadeRec sr, float3 wi, float3 wo)
         {
             return float3.zero;
@@ -30,9 +26,9 @@ namespace RayTracer
             return (Fresnel(sr) / abs(dot(sr.normal, wi)));
         }
 
-        public float Fresnel(ShadeRec sr)
+        private float Fresnel(ShadeRec sr)
         {
-            var normal = sr.normal;
+            float3 normal = sr.normal;
             var ndotd = -dot(normal, sr.ray.d);
             float eta;
 
@@ -44,13 +40,12 @@ namespace RayTracer
                 eta = etaIn / etaOut;
 
             var cosThetaI 		= -dot(normal, sr.ray.d);
-            var temp 			= 1.0f - (1.0f - cosThetaI * cosThetaI) / (eta * eta);
             var cosThetaT 		= sqrt (1.0f - (1.0f - cosThetaI * cosThetaI) / (eta * eta));
             var rParallel 		= (eta * cosThetaI - cosThetaT) / (eta * cosThetaI + cosThetaT);
             var rPerpendicular 	= (cosThetaI - eta * cosThetaT) / (cosThetaI + eta * cosThetaT);
             var kr 				= 0.5f * (rParallel * rParallel + rPerpendicular * rPerpendicular);
 
-            return (kr);
+            return kr;
         }
     }
 }

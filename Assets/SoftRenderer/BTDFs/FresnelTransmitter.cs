@@ -1,5 +1,4 @@
-﻿using Unity.Mathematics;
-using static Unity.Mathematics.math;
+﻿using static Unity.Mathematics.math;
 using float3 = Unity.Mathematics.float3;
 
 namespace RayTracer
@@ -17,7 +16,7 @@ namespace RayTracer
 
         public float3 SampleF(ShadeRec sr, float3 wo, out float3 wt)
         {
-            var n = sr.normal;
+            float3 n = sr.normal;
             var cosThetai = dot(n, wo);
             var eta = etaIn / etaOut;
 
@@ -28,8 +27,8 @@ namespace RayTracer
             }
 
             var temp = 1.0f - (1.0f - cosThetai * cosThetai) / (eta * eta);
-            var cosTheta2 = sqrt(temp);
-            wt = -wo / eta - (cosTheta2 - cosThetai / eta) * n;
+            var cosThetat = sqrt(temp);
+            wt = -wo / eta - (cosThetat - cosThetai / eta) * n;
 
             return (Fresnel(sr) / (eta * eta) / abs(dot(sr.normal, wt)));
         }
@@ -39,9 +38,9 @@ namespace RayTracer
             return float3.zero;
         }
 
-        public bool Tir(ShadeRec sr)
+        public bool TotalInterReflect(ShadeRec sr)
         {
-            var wo = -sr.ray.d;
+            float3 wo = -sr.ray.d;
             var cosThetai = dot(sr.normal, wo);
             var eta = etaIn / etaOut;
 
@@ -51,10 +50,10 @@ namespace RayTracer
             return (1.0f - (1.0f - cosThetai * cosThetai) / (eta * eta) < 0.0f);
         }
 
-        public float Fresnel(ShadeRec sr)
+        private float Fresnel(ShadeRec sr)
         {
-            var normal = sr.normal;
-            var ndotd = - dot(normal, sr.ray.d);
+            float3 normal = sr.normal;
+            var ndotd = -dot(normal, sr.ray.d);
             float eta;
 
             if (ndotd < 0.0) {
@@ -65,7 +64,6 @@ namespace RayTracer
                 eta = etaIn / etaOut;
 
             var cosThetaI 		= -dot(normal,sr.ray.d);
-            var temp 			= 1.0f - (1.0f - cosThetaI * cosThetaI) / (eta * eta);
             var cosThetaT 		= sqrt(1.0f - (1.0f - cosThetaI * cosThetaI) / (eta * eta));
             var rParallel 		= (eta * cosThetaI - cosThetaT) / (eta * cosThetaI + cosThetaT);
             var rPerpendicular 	= (cosThetaI - eta * cosThetaT) / (cosThetaI + eta * cosThetaT);

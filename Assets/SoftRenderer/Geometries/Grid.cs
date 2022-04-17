@@ -6,12 +6,10 @@ namespace RayTracer
 {
     public class Grid : CompoundObject
     {
-        private const float KEpsilon = 0.0001f;
-        
         public void SetupCells()
         {
-	        var p0 = FindMinBounds();
-	        var p1 = FindMaxBounds();
+	        float3 p0 = FindMinBounds();
+	        float3 p1 = FindMaxBounds();
 
 	        bbox.x0 = p0.x;
 	        bbox.y0 = p0.y;
@@ -517,48 +515,6 @@ namespace RayTracer
 			        }
 		        }
 	        }
-        }
-
-        private float3 FindMinBounds()
-        {
-            var p0 = float3(float.MaxValue);
-
-            foreach (var obj in objects)
-            {
-                var objectBox = obj.GetBoundingBox();
-
-                if (objectBox.x0 < p0.x)
-                    p0.x = objectBox.x0;
-                if (objectBox.y0 < p0.y)
-                    p0.y = objectBox.y0;
-                if (objectBox.z0 < p0.z)
-                    p0.z = objectBox.z0;
-            }
-
-            p0.x -= KEpsilon; p0.y -= KEpsilon; p0.z -= KEpsilon;
-
-            return p0;
-        }
-
-        private float3 FindMaxBounds()
-        {
-            var p1 = float3(-float.MaxValue);
-
-            foreach (var obj in objects)
-            {
-                var objectBox = obj.GetBoundingBox();
-
-                if (objectBox.x1 > p1.x)
-                    p1.x = objectBox.x1;
-                if (objectBox.y1 > p1.y)
-                    p1.y = objectBox.y1;
-                if (objectBox.z1 > p1.z)
-                    p1.z = objectBox.z1;
-            }
-
-            p1.x += KEpsilon; p1.y += KEpsilon; p1.z += KEpsilon;
-
-            return p1;
         }
 
         public void Clear()

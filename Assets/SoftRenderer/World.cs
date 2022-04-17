@@ -39,9 +39,10 @@ namespace RayTracer
 
             (ambient as AmbientOccluder)?.SetSampler(new MultiJittered(traceCamera.sampleCount));
             
-            foreach (var obj in transform.GetComponentsInChildren<GeometricObject>())
+            foreach (GeometricObject obj in transform.GetComponentsInChildren<GeometricObject>())
             {
-                obj.GetMaterial().SetSamples(new MultiJittered(traceCamera.sampleCount));
+                obj.Init();
+                obj.GetMaterial().Init(traceCamera.sampleCount);
                 AddObject(obj);
             }
             
