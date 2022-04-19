@@ -65,7 +65,7 @@ namespace RayTracer
         public override float3 AreaLightShade(ShadeRec sr)
         {
             float3 wo = -sr.ray.d;
-            float3 radiance = float3.zero;// zjtest = ambient_brdf.rho(sr, wo) * sr.w.ambient.L(sr);
+            float3 radiance = ambient_brdf.rho(sr, wo) * sr.w.ambient.L(sr);
 
             foreach (LightBase light in sr.w.lights)
             {

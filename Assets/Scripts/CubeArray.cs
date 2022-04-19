@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class CubeArray : MonoBehaviour
 {
-    public GameObject cubePrefab;
+    public GameObject cube;
     public int width = 10;
     public int length = 10;
     public float space = 1.2f;
@@ -27,7 +27,7 @@ public class CubeArray : MonoBehaviour
         {
             for (var x = 0; x < width; x++)
             {
-                var newObj = Instantiate(cubePrefab, transform.position, quaternion.identity);
+                GameObject newObj = Instantiate(cube, transform.position, quaternion.identity);
                 newObj.transform.parent = transform;
                 var size = Random.Range(sizeMin, sizeMax);
                 var height = Random.Range(heightMin, heightMax);
@@ -47,7 +47,7 @@ public class CubeArray : MonoBehaviour
 
     public void Clear()
     {
-        foreach (var obj in obj_list)
+        foreach (GameObject obj in obj_list)
         {
             DestroyImmediate(obj);
         }

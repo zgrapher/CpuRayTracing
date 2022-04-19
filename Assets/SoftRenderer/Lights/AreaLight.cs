@@ -7,7 +7,7 @@ namespace RayTracer
 {
     public class AreaLight : LightBase
     {
-        [SerializeField] private GeometricObject light_object;
+        [SerializeField] private Geomtric light_object;
 
         [SerializeField] private Material material;
         
@@ -26,13 +26,13 @@ namespace RayTracer
 
         public override float Pdf(ShadeRec sr)
         {
-            return light_object.Pdf(sr);
+            return light_object.geometric.Pdf(sr);
         }
 
         public override float3 GetDirection(ShadeRec sr)
         {
-            sample_point = light_object.Sample();
-            light_normal = light_object.GetNormal();
+            sample_point = light_object.geometric.Sample();
+            light_normal = light_object.geometric.GetNormal();
             wi = normalize(sample_point - sr.hit_point);
             return wi;
         }

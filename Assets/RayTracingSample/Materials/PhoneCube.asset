@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cd: {r: 1, g: 1, b: 1, a: 0}
   cs: {r: 0, g: 0, b: 0, a: 0}
-  ka: 0
+  ka: 1
   kd: 1
   ks: 0
   Exp: 0

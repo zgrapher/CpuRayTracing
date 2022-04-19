@@ -5,11 +5,11 @@ using float3 = Unity.Mathematics.float3;
 
 namespace RayTracer
 {
-    public class Rect : GeometricObject
+    public class Rect : IGeometricObject
     {
         private const float KEpsilon = 0.001f;
 
-        [SerializeField] private Material material;
+        public Material material;
 
         public void SetData(float3 p0, float3 a, float3 b, float3 n)
         {
@@ -24,19 +24,18 @@ namespace RayTracer
             area = length(a) * length(b);
             inv_area = 1.0f / area;
         }
-        
-        public override void Init()
-        {
-            Transform trans = transform;
-            var p = (float3)trans.position;
-            Vector3 lossyScale = trans.lossyScale;
-            var scaleX = lossyScale.x;
-            var scaleY = lossyScale.y;
 
-            a = scaleX * trans.right;
-            b = scaleY * trans.up;
-            p0 = p - 0.5f * (a + b);
-            normal = -trans.forward;
+        public void UpdateData(float3 pos, float3 right, float3 up, float3 forward, float3 scale, Material mat)
+        {
+            material = mat;
+            
+            var scaleX = scale.x;
+            var scaleY = scale.y;
+
+            a = scaleX * right;
+            b = scaleY * up;
+            p0 = pos - 0.5f * (a + b);
+            normal = -forward;
 
             a_len_squared = lengthsq(a);
             b_len_squared = lengthsq(b);
@@ -45,12 +44,14 @@ namespace RayTracer
             inv_area = 1.0f / area;
         }
 
-        public override void SetSampler(Sampler samp)
+        public bool enableShadow { get; set; }
+
+        public void SetSampler(Sampler samp)
         {
             sampler = samp;
         }
         
-        public override bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr)
+        public bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr)
         {
             tMin = -1.0f;
             var t = dot((p0 - ray.o), normal) / dot(ray.d, normal);
@@ -75,7 +76,7 @@ namespace RayTracer
             return true;
         }
         
-        public override bool ShadowHit(TraceRay ray, out float tMin)
+        public bool ShadowHit(TraceRay ray, out float tMin)
         {
             tMin = -1.0f;
             if (!enableShadow)
@@ -101,23 +102,23 @@ namespace RayTracer
             return true;
         }
 
-        public override float Pdf(ShadeRec sr)
+        public float Pdf(ShadeRec sr)
         {
             return inv_area;
         }
 
-        public override float3 Sample()
+        public float3 Sample()
         {
             float2 samplePoint = sampler.SampleUnitSquare();
             return p0 + samplePoint.x * a + samplePoint.y * b;
         }
 
-        public override float3 GetNormal()
+        public float3 GetNormal()
         {
             return normal;
         }
 
-        public override BBox GetBoundingBox()
+        public BBox GetBoundingBox()
         {
             const float delta = 0.0001f;
 
@@ -126,7 +127,7 @@ namespace RayTracer
                 min(p0.z, p0.z + a.z + b.z) - delta, max(p0.z, p0.z + a.z + b.z) + delta));
         }
 
-        public override Material GetMaterial()
+        public Material GetMaterial()
         {
             return material;
         }
@@ -141,6 +142,5 @@ namespace RayTracer
         private float inv_area;
 
         private Sampler sampler;
-        public bool enableShadow;
     }
 }

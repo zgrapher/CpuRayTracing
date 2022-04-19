@@ -10,11 +10,7 @@ namespace RayTracer
         
         protected Material material;
 
-        public virtual void Init()
-        {
-        }
-
-        public void Clear()
+        public void ClearObjects()
         {
             objects.Clear();
         }
@@ -35,6 +31,18 @@ namespace RayTracer
         }
 
         public BBox GetBoundingBox()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UpdateData(float3 pos, float3 right, float3 up, float3 forward, float3 scale, Material mat)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool enableShadow { get; set; }
+
+        public virtual void Update(float3 pos, float3 right, float3 up, float3 forward, float3 scale, Material mat)
         {
             throw new System.NotImplementedException();
         }

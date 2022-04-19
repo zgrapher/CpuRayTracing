@@ -1,23 +1,27 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
 using static Unity.Mathematics.math;
+using float3 = Unity.Mathematics.float3;
 
 namespace RayTracer
 {
-    public class Sphere : GeometricObject
+    public class Sphere : IGeometricObject
     {
         private const float KEpsilon = 0.001f;
 
-        [SerializeField] private Material material;
+        private Material material;
 
-        public override void Init()
+        public void UpdateData(float3 pos, float3 right, float3 up, float3 forward, float3 scale, Material mat)
         {
-            Transform trans = transform;
-            center = trans.position;
-            radius = trans.localScale.x * 0.5f;
+            material = mat;
+            
+            center = pos;
+            radius = scale.x * 0.5f;
         }
 
-        public override bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr)
+        public bool enableShadow { get; set; }
+
+        public bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr)
         {
             float3 temp = (float3)ray.o - center;
             var a = dot(ray.d, ray.d);
@@ -58,7 +62,7 @@ namespace RayTracer
             return false;
         }
 
-        public override bool ShadowHit(TraceRay ray, out float tMin)
+        public bool ShadowHit(TraceRay ray, out float tMin)
         {
             tMin = -1;
             if (!enableShadow)
@@ -98,7 +102,26 @@ namespace RayTracer
             return false;
         }
 
-        public override BBox GetBoundingBox()
+        public float Pdf(ShadeRec sr)
+        {
+            return 1.0f;
+        }
+
+        public float3 Sample()
+        {
+            return float3.zero;
+        }
+
+        public float3 GetNormal()
+        {
+            return float3.zero;
+        }
+
+        public void SetSampler(Sampler samp)
+        {
+        }
+
+        public BBox GetBoundingBox()
         {
             const float delta = 0.000001f;
             return (new BBox(center.x - radius - delta, center.x + radius + delta,
@@ -106,13 +129,12 @@ namespace RayTracer
                 center.z - radius - delta, center.z + radius + delta));
         }
 
-        public override Material GetMaterial()
+        public Material GetMaterial()
         {
             return material;
         }
 
         private float3 center;
         private float radius;
-        public bool enableShadow;
     }
 }

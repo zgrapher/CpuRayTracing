@@ -39,11 +39,10 @@ namespace RayTracer
 
             (ambient as AmbientOccluder)?.SetSampler(new MultiJittered(traceCamera.sampleCount));
             
-            foreach (GeometricObject obj in transform.GetComponentsInChildren<GeometricObject>())
+            foreach (Geomtric geo in transform.GetComponentsInChildren<Geomtric>())
             {
-                obj.Init();
-                obj.GetMaterial().Init(traceCamera.sampleCount);
-                AddObject(obj);
+                geo.geometric.GetMaterial().Init(traceCamera.sampleCount);
+                AddObject(geo.geometric);
             }
             
             if (useGrid)
@@ -60,7 +59,7 @@ namespace RayTracer
                     case AmbientOccluder _:
                         continue;
                     case AreaLight area:
-                        area.GetComponent<GeometricObject>().SetSampler(new MultiJittered(traceCamera.sampleCount));
+                        area.GetComponent<Geomtric>().geometric.SetSampler(new MultiJittered(traceCamera.sampleCount));
                         break;
                 }
 

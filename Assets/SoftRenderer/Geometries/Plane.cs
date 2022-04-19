@@ -1,24 +1,34 @@
-﻿using UnityEngine;
-using static Unity.Mathematics.math;
+﻿using static Unity.Mathematics.math;
 using float3 = Unity.Mathematics.float3;
 
 namespace RayTracer
 {
-    public class Plane : GeometricObject
+    public class Plane : IGeometricObject
     {
         private const float KEpsilon = 0.001f;
 
-        [SerializeField]
         private Material material;
 
-        public override void Init()
+        public void Init()
         {
-            Transform trans = transform;
-            point = trans.position;
-            normal = trans.up;
         }
 
-        public override bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr)
+        public BBox GetBoundingBox()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UpdateData(float3 pos, float3 right, float3 up, float3 forward, float3 scale, Material mat)
+        {
+            material = mat;
+            
+            point = pos;
+            normal = up;
+        }
+
+        public bool enableShadow { get; set; }
+
+        public bool Hit(TraceRay ray, out float tMin, ref ShadeRec sr)
         {
             var t = dot(point - ray.o, normal) / dot(ray.d, normal);
             if (t > KEpsilon)
@@ -35,7 +45,7 @@ namespace RayTracer
             }
         }
 
-        public override bool ShadowHit(TraceRay ray, out float tMin)
+        public bool ShadowHit(TraceRay ray, out float tMin)
         {
             tMin = -1;
             if (!enableShadow)
@@ -51,13 +61,31 @@ namespace RayTracer
             return false;
         }
 
-        public override Material GetMaterial()
+        public float Pdf(ShadeRec sr)
+        {
+            return 1.0f;
+        }
+
+        public float3 Sample()
+        {
+            return float3.zero;
+        }
+
+        public float3 GetNormal()
+        {
+            return float3.zero;
+        }
+
+        public void SetSampler(Sampler samp)
+        {
+        }
+
+        public Material GetMaterial()
         {
             return material;
         }
 
         private float3 point;
         private float3 normal;
-        public bool enableShadow;
     }
 }
