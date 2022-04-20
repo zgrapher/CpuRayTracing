@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 using static Unity.Mathematics.math;
+using Random = UnityEngine.Random;
 
 namespace RayTracer
 {
@@ -44,8 +46,8 @@ namespace RayTracer
                     {
                         int k = Random.Range(j, n);
 
-                        var sj = samples[i * n + j + p * numSamples];
-                        var sk = samples[i * n + k + p * numSamples];
+                        float2 sj = samples[i * n + j + p * numSamples];
+                        float2 sk = samples[i * n + k + p * numSamples];
 
                         (sj.x, sk.x) = (sk.x, sj.x);
 
@@ -59,8 +61,8 @@ namespace RayTracer
                     {
                         int k = Random.Range(j, n);
 
-                        var sj = samples[i * n + j + p * numSamples];
-                        var sk = samples[i * n + k + p * numSamples];
+                        float2 sj = samples[i * n + j + p * numSamples];
+                        float2 sk = samples[i * n + k + p * numSamples];
 
                         (sj.y, sk.y) = (sk.y, sj.y);
 

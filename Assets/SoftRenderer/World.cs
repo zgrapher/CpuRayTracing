@@ -2,6 +2,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 using static Unity.Mathematics.math;
+using Random = UnityEngine.Random;
 
 namespace RayTracer
 {
@@ -30,6 +31,8 @@ namespace RayTracer
 
         public void Build()
         {
+            Random.InitState(1);
+            
             objects.Clear();
             lights.Clear();
             grid.Clear();

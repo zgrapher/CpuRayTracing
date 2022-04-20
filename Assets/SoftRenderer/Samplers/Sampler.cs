@@ -12,9 +12,9 @@ namespace RayTracer
         {
         }
 
-        protected Sampler(int ns, int nSets)
+        private Sampler(int ns, int nSets)
         {
-            rand = new Random(5);
+            rand = new Random((uint)1);
             
             numSamples = ns;
             num_sets = nSets;
@@ -58,9 +58,9 @@ namespace RayTracer
                 indices.Add(i);
             }
 
+            var rnd = new System.Random(4);
             for (var p = 0; p < num_sets; p++)
             {
-                var rnd = new System.Random();
                 var randomized = indices.OrderBy(item => rnd.Next());
                                 
                 foreach (var v in randomized)
@@ -92,10 +92,10 @@ namespace RayTracer
 
         protected int num_sets;
         protected readonly List<float2> samples = new List<float2>();
-        private List<int> shuffled_indices = new List<int>();
-        private List<float3> hemisphere_samples = new List<float3>();
-        private uint count = 0;
-        private int jump = 0;
+        private readonly List<int> shuffled_indices = new List<int>();
+        private readonly List<float3> hemisphere_samples = new List<float3>();
+        private uint count;
+        private int jump;
         private Random rand;
     }
 }

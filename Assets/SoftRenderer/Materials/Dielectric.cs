@@ -43,13 +43,13 @@ namespace RayTracer
                 {
                     // 内部
                     radianceR = sr.w.tracer.TraceRay(reflectedRay, ref t, sr.depth + 1);
-                    // zjtest radiance += pow(cfIn, t) * radianceR;
+                    radiance += pow(cfIn, t) * radianceR;
                 }
                 else
                 {
                     // 外部
                     radianceR = sr.w.tracer.TraceRay(reflectedRay, ref t, sr.depth + 1);
-                    // zjtest radiance += pow(cfOut, t) * radianceR;
+                    radiance += pow(cfOut, t) * radianceR;
                 }
             }
             else
@@ -62,7 +62,7 @@ namespace RayTracer
                 {
                     // 反射光线在里面
                     radianceR = fr * sr.w.tracer.TraceRay(reflectedRay, ref t, sr.depth + 1) * abs(ndotwi);
-                    // zjtest radiance += pow(cfIn, t) * radianceR;
+                    radiance += pow(cfIn, t) * radianceR;
                     
                     // 折射光线在外面
                     radianceT = ft * sr.w.tracer.TraceRay(transmittedRay, sr.depth + 1) * abs(ndotwt);
@@ -72,7 +72,7 @@ namespace RayTracer
                 {
                     // 反射光线在外面
                     radianceR = fr * sr.w.tracer.TraceRay(reflectedRay, ref t, sr.depth + 1) * abs(ndotwi);
-                    // zjtest radiance += pow(cfOut, t) * radianceR;
+                    radiance += pow(cfOut, t) * radianceR;
                     
                     // 折射光线在里面
                     radianceT = ft * sr.w.tracer.TraceRay(transmittedRay, sr.depth + 1) * abs(ndotwt);
